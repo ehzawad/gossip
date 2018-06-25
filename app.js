@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 // define as the last app.use callback
 app.use((err, req, res, next) => {
   res.status(err.status || 500)
-  res.renser('error', { message: err.message, error: {} })
+  res.render('error', { message: err.message, error: {} })
 })
 
-app.listen(3003, () => console.log('express app listening on port 3003'))
+app.listen(3000, () => console.log('express app listening on port 3003'))
