@@ -40,4 +40,4 @@ app.use((err, req, res, next) => {
   res.render('error', { message: err.message, error: {} })
 })
 
-app.listen(3000, () => console.log('express app listening on port 3003'))
+app.listen(3000, () => console.log('express app listening on port 3000'))
