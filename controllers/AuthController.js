@@ -4,6 +4,7 @@ var logger       = require('logger').createLogger('development.log'); // logs to
 const UserData   = require("../models/user");
 var bcrypt       = require('bcrypt');
 const saltRounds = 10;
+const session    = require('express-session')
 
 /*
 *
@@ -72,7 +73,12 @@ exports.login = function (req, res){
                         bcrypt.compare(req.body.password, data.password, function(err, response) {
                             if (response) {
                                 req.session.userId = data._id;
-                                console.log(req.session.userId);
+                                req.session.name = data.name;
+                                req.session.email = data.email;
+
+                                req.session.cookie.id = data._id;
+                                console.log(req.session)
+
                                 return res.redirect('/gossip/chat');
                             } else {
                                 return res.redirect('/login');

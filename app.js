@@ -2,7 +2,12 @@ const express		 	= require('express')
 const bodyParser 	 	= require('body-parser')
 const app 				= express()
 const mongoose 			= require('mongoose')
-var session             = require('express-session')
+const cookieParser 		= require('cookie-parser');
+const session           = require('express-session')
+const port 				= 3000 
+
+var connectedUser = {};
+var connectedUserInfo = {};
 
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/gossip")
@@ -35,7 +40,12 @@ const gossip 			= require('./routes/Gossip')
 app.use(session({
   secret: 'daf44saz3dbsuvb3218318hsd',
   resave: true,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { 
+  	secure: false, 
+  	maxAge:269999999999,
+  	httpOnly: true
+  }
 }));
 
 app.use('/', routes)
@@ -62,4 +72,33 @@ app.use((err, req, res, next) => {
   res.render('error', { message: err.message, error: {} })
 })
 
-app.listen(3000, () => console.log('express app listening on port 3000'))
+
+
+/// Socket configuration
+var io = require('socket.io').listen(app.listen(port));
+
+
+io.sockets.on('connection', function (socket) {
+	//console.log('CHater application');
+
+   	socket.emit('previousOnline', connectedUserInfo);
+
+
+	socket.on('online', function(data){
+
+		connectedUserInfo[data.userId] = data
+		connectedUser[data.userId] = socket
+		var userdata = {};
+		userdata[data.userId] = data;
+
+		socket.broadcast.emit('online', userdata); 
+	})
+
+    //socket.emit('message', { message: 'welcome to the chat' });
+    socket.on('chat', function (data) {
+    	console.log(data)
+        io.emit('chat', data);
+    });
+});
+
+//app.listen(3000, () => console.log('express app listening on port 3000'))

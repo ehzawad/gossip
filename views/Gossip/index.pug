@@ -15,54 +15,18 @@ block content
 			div(class='col-sm-9')
 				/// User name
 				div(id='message-name') 
-					h1(id='name') Name
-					p(id='email') email
+					h1(id='name') #{Name}
+					p(id='email') #{Email}
 				
 				div(id='chat-window')
 					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
-					div(id='output')
-						h1 testing testing
+						
+
 				div(id='always-on-bottom')
+					input( id='handle' type='text' placeholder='Name' )
 					input( id='message' type='text' placeholder='Message!' )
 					button( id='send' ) Send
+
+	div(id="currentUserName" style="display:none") #{Name}
+	div(id="currentUserId" style="display:none") #{Id}
+	div(id="currentUserEmail" style="display:none") #{Email}
