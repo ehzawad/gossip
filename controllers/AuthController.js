@@ -10,23 +10,46 @@ const saltRounds = 10;
 *  User registration
 *       todo: validation
 *       todo: error message
-*       todo: restore signup info after an error        
+*       todo: restore signup info after an error
 */
+
 exports.register = function(req, res){
     try {
-        
-        /// TODO: More validation 
+
+        /// TODO: More validation
+      //
+      //
         if ( req.body.email && req.body.name && ( req.body.password == req.body.confirmPassword ) ) {
-            
+
             var userdata = {
                 email: req.body.email,
                 name: req.body.name
             }
 
+
+          var userSchema = new Schema({
+            email: {
+              type: String,
+              validate: {
+                validator: function(v,res, cb) {
+                  userdata.find({email: v}, function(err, docs) {
+                    res.message = " User already exists"
+                    cb(docs.length == 0)
+                  })
+                },
+              }
+            }
+          })
+
+
+
+
+          console.log(userSchema.message)
+
             bcrypt.genSalt(saltRounds, function(err, salt) {
                     bcrypt.hash(req.body.password, salt, function(err, hash) {
                         userdata.password = hash;
-                        
+
                         UserData.create(userdata, function(err, user){
                           if (err) {
                                 console.log(err);
@@ -56,13 +79,13 @@ exports.register = function(req, res){
 *  User login
 *       todo: validation
 *       todo: error message
-*       todo: restore login info after an error        
+*       todo: restore login info after an error
 *
 */
 
 exports.login = function (req, res){
      try {
-        if ( req.body.email && req.body.password ) { 
+        if ( req.body.email && req.body.password ) {
             var user = UserData.findOne({ email: req.body.email});
             user.exec(function (err, data) {
                 if (err) {
@@ -77,7 +100,7 @@ exports.login = function (req, res){
                             } else {
                                 return res.redirect('/login');
                             }
-                        });  
+                        });
                     } else {
                         return res.redirect('/login')
                     }
@@ -88,6 +111,7 @@ exports.login = function (req, res){
         }
 
     } catch(error){
+      console.log(error)
         res.status(500).json({
             success: false,
             message: error,
@@ -105,7 +129,7 @@ exports.login = function (req, res){
 *
 */
 exports.logout = function (req, res){
-   
+
     try {
         if ( req.session ) {
             req.session.destroy(function(err){
@@ -121,5 +145,5 @@ exports.logout = function (req, res){
     } catch(e) {
         console.log(e);
     }
-   
+
 }
