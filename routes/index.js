@@ -4,6 +4,9 @@ const express = require('express')
 const router = express.Router()
 
 const user = require('../controllers/UserController')
+
+/// starts with root then
+
 // GET root route
 router.get('/', (req, res, next) => res.render('index', { title: 'Home'}))
 

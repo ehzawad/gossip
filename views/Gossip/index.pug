@@ -15,15 +15,14 @@ block content
 			div(class='col-sm-9')
 				/// User name
 				div(id='message-name') 
-					h1(id='name') #{Name}
-					p(id='email') #{Email}
+					h1(id='currentName') 
+					p(id='currentEmail') 
 				
 				div(id='chat-window')
 					div(id='output')
 						
 
 				div(id='always-on-bottom')
-					input( id='handle' type='text' placeholder='Name' )
 					input( id='message' type='text' placeholder='Message!' )
 					button( id='send' ) Send
 

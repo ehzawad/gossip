@@ -96,8 +96,11 @@ io.sockets.on('connection', function (socket) {
 
     //socket.emit('message', { message: 'welcome to the chat' });
     socket.on('chat', function (data) {
-    	console.log(data)
-        io.emit('chat', data);
+        console.log(data.to)
+        if (connectedUser[data.to]) {
+        	connectedUser[data.to].emit('chat', data);
+        }
+        connectedUser[data.from].emit('chat', data);	
     });
 });
 

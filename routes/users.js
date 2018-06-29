@@ -5,6 +5,9 @@ const router = express.Router()
 
 const user = require('../controllers/UserController')
 
+/// starts with /user then
+
+
 // User authentication
 router.get('/', user.get_user);
 router.get('/:id', user.get_user);
