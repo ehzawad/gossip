@@ -16,7 +16,7 @@ exports.register = function(req, res){
     try {
         
         /// TODO: More validation 
-        if ( req.body.email && req.body.name && (req.body.password == req.body.confirmPassword) ) {
+        if ( req.body.email && req.body.name && ( req.body.password == req.body.confirmPassword ) ) {
             
             var userdata = {
                 email: req.body.email,
@@ -71,7 +71,8 @@ exports.login = function (req, res){
                     if ( data ) {
                         bcrypt.compare(req.body.password, data.password, function(err, response) {
                             if (response) {
-                                
+                                req.session.userId = data._id;
+                                console.log(req.session.userId);
                                 return res.redirect('/gossip/chat');
                             } else {
                                 return res.redirect('/login');
@@ -95,4 +96,30 @@ exports.login = function (req, res){
 
     }
 
+}
+
+
+/*
+*
+*   Logout users
+*
+*/
+exports.logout = function (req, res){
+   
+    try {
+        if ( req.session ) {
+            req.session.destroy(function(err){
+                if ( err ) {
+                    console.log(err);
+                    return res.redirect('/gossip/chat');
+                } else {
+                    return res.redirect('/');
+                }
+            })
+        }
+
+    } catch(e) {
+        console.log(e);
+    }
+   
 }

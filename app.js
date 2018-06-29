@@ -2,6 +2,7 @@ const express		 	= require('express')
 const bodyParser 	 	= require('body-parser')
 const app 				= express()
 const mongoose 			= require('mongoose')
+var session             = require('express-session')
 
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/gossip")
@@ -29,6 +30,13 @@ const routes 			= require('./routes/index')
 const users 			= require('./routes/users')
 const authentication 	= require('./routes/Authentication')
 const gossip 			= require('./routes/Gossip')
+
+//use sessions for tracking logins
+app.use(session({
+  secret: 'daf44saz3dbsuvb3218318hsd',
+  resave: true,
+  saveUninitialized: false
+}));
 
 app.use('/', routes)
 app.use('/', authentication)
