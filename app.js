@@ -1,7 +1,7 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-const mongoose = require('mongoose')
+const express		 	= require('express')
+const bodyParser 	 	= require('body-parser')
+const app 				= express()
+const mongoose 			= require('mongoose')
 
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/gossip")
@@ -25,8 +25,15 @@ app.set('views', __dirname + '/views')
 // include routes
 // recall, you wrote those in ./routes/index.js file
 // it's not necessary to give extension of js
-const routes = require('./routes/index')
+const routes 			= require('./routes/index')
+const users 			= require('./routes/users')
+const authentication 	= require('./routes/Authentication')
+const gossip 			= require('./routes/Gossip')
+
 app.use('/', routes)
+app.use('/', authentication)
+app.use('/user', users)
+app.use('/gossip', gossip)
 
 // few more middleware to catch errors
 

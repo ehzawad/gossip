@@ -1,6 +1,9 @@
+"use strict"
+
 const express = require('express')
 const router = express.Router()
 
+const user = require('../controllers/UserController')
 // GET root route
 router.get('/', (req, res, next) => res.render('index', { title: 'Home'}))
 
@@ -10,11 +13,8 @@ router.get('/about', (req, res, next) => res.render('about', { title: 'About'}))
 // GET /contact
 router.get('/contact', (req, res, next) => res.render('contact', { title: 'Contact'}))
 
-// GET /register
-router.get('/register', (req, res, next) => res.render('register', { title: 'Sign Up'}))
 
-// POST /register
-router.post('/register', (req, res, next) => res.send('User Created ...not really'))
+
 
 module.exports = router
 
