@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var validator = require("email-validator");
 var passwordValidator = require('password-validator');
 var User = require('../models/user');
 var mid = require('../middleware');
@@ -73,6 +74,10 @@ passwordSchema
 
 // POST /register
 router.post('/register', function(req, res, next) {
+
+  if (validator.validate(req.body.email) === false) {
+    throw new Error("Email is not valid");
+  }
 
   if (passwordSchema.validate(req.body.password) === false) {
     throw new Error("Password is not Strong");
