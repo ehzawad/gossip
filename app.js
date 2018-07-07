@@ -7,7 +7,7 @@ var app = express();
 
 // mongodb connection
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/gossiping", { useMongoClient: true });
+//mongoose.connect("mongodb://localhost:27017/gossiping", { useMongoClient: true });
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
