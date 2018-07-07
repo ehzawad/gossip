@@ -5,6 +5,8 @@ const UserData   = require("../models/user");
 var bcrypt       = require('bcrypt');
 const saltRounds = 10;
 const session    = require('express-session')
+var validator    = require('validator');
+
 
 /*
 *
@@ -17,9 +19,46 @@ const session    = require('express-session')
 exports.register = function(req, res){
     try {
 
+    	var errors = [];
+    	req.session.errors = {}
+    	req.session.errors.password = {}
+    	req.session.errors.email = {}
+
+    	if (!validator.isEmail(req.body.email)) {
+    		req.session.errors.email.error = true; 
+    		req.session.errors.email.message = "Not an email";
+    	}
+
+    	if (!validator.isLength(req.body.password, { min:8, max:undefined })) {
+    		req.session.errors.password.error = true; 
+    		req.session.errors.password.message = "Minimum 8 charecter";
+    	}
+
+    	if ( req.body.password != req.body.confirmPassword ) {
+    		req.session.errors.password.error = true; 
+    		req.session.errors.password.message = "Confirmed Password does not match";
+    	}
+
+    	if (!req.body.email) {
+    		req.session.errors.email.error = true; 
+    		req.session.errors.email.message = "Please enter an email";
+    	}
+
+    	if (!req.body.name) {
+    		req.session.errors.password.error = true; 
+    		req.session.errors.password.message = "Please enter a name";
+    	}
+
+    	if (req.session.errors.email || req.session.errors.password) {
+    		console.log(req.session);
+    		return res.redirect('/register');
+    	} else {
+    		console.log("ashe na");
+    		return res.redirect('/register');
+    	}
+
+
         /// TODO: More validation
-      //
-      //
         if ( req.body.email && req.body.name && ( req.body.password == req.body.confirmPassword ) ) {
 
             var userdata = {
@@ -65,12 +104,10 @@ exports.register = function(req, res){
         }
 
     } catch(error){
-        res.status(500).json({
-            success: false,
-            message: error,
-            data: []
-        })
-
+    	console.log(error) 
+    	res.status(500).json({
+    		error: error    		
+    	})
     }
 }
 
