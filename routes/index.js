@@ -75,18 +75,19 @@ passwordSchema
 // POST /register
 router.post('/register', function(req, res, next) {
 
-  if (validator.validate(req.body.email) === false) {
-    throw new Error("Email is not valid");
-  }
-
-  if (passwordSchema.validate(req.body.password) === false) {
-    throw new Error("Password is not Strong");
-  }
-
   if (req.body.email &&
     req.body.name &&
     req.body.password &&
     req.body.confirmPassword) {
+
+
+      if (validator.validate(req.body.email) === false) {
+        throw new Error("Email is not valid");
+      }
+
+      if (passwordSchema.validate(req.body.password) === false) {
+        throw new Error("Password is not Strong");
+      }
 
       // confirm that user typed same password twice
       if (req.body.password !== req.body.confirmPassword) {
