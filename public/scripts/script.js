@@ -39,7 +39,7 @@ window.onload = function () {
 					/// removes message text
 					message.value = "";
 					loadAllMessage( currentUserId, chattingWith);
-					
+
 					document.getElementById(event.target.id).style.backgroundColor = 'white';
 
 				})
@@ -124,7 +124,7 @@ window.onload = function () {
 	btn.addEventListener('click', function(){
 		// if no receipient selected
 		// error alert thrown
-		if (chattingWith) {
+		if (chattingWith && message.value.trim() != "") {
 			// emmiting data to chat
 			var newMessage = {
 				message: message.value,
@@ -169,15 +169,12 @@ window.onload = function () {
 			var element = document.getElementById('chat-window');
 			element.scrollTo(0, element.scrollHeight + 300 );			
 		} else {
-			alert("Please select a user to send message");
+			alert("Please say something");
 		} 
 	})
 
 	/// when a chat is received shown on display
 	socket.on('chat', function(data) {
-		console.log(data);
-
-
 
 		if (data.sentById != chattingWith) {
 

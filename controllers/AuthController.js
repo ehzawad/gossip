@@ -93,10 +93,11 @@ exports.register = function(req, res, next){
 *
 */
 
-exports.login = function (req, res){
+exports.login = function (req, res, next){
      try {
         if ( req.body.email && req.body.password ) {
-            var user = UserData.findOne({ email: req.body.email});
+            /// finds the person with email
+            var user = UserData.findOne({ email: req.body.email });
             user.exec(function (err, data) {
                 if (err) {
                     return res.redirect('/login');
@@ -122,7 +123,9 @@ exports.login = function (req, res){
                 }
             });
         } else {
-            return res.redirect('/login');
+            var err = new Error('All fields required.');
+            err.status = 400;
+            return next(err);
         }
 
     } catch(error){
