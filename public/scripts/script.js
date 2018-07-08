@@ -18,13 +18,14 @@ window.onload = function () {
 				console.log(data);
 				console.log("me");
 				console.log(currentUserName);
+
+
+
+
 		for (var key in data) {
 			if (key != currentUserId) {
 				/// store user data on the client side
 				users[key] = data[key];
-
-				
-
 
 				var card = document.createElement('div')
         		card.setAttribute("class", "card");	
@@ -35,8 +36,17 @@ window.onload = function () {
 					currentName.innerText = users[event.target.id].userName;
 					currentEmail.innerText = users[event.target.id].userEmail;
 
+					/// removes message text
+					message.value = "";
 					loadAllMessage( currentUserId, chattingWith);
-				})    			
+					
+					document.getElementById(event.target.id).style.backgroundColor = 'white';
+
+				})
+
+				if (!chattingWith) {
+					card.click();
+				}    			
 
         		var cardBody = document.createElement('div')
 				cardBody.setAttribute('class', 'card-body')
@@ -51,9 +61,12 @@ window.onload = function () {
 				useremail.innerText = data[key].userEmail;				
         		useremail.setAttribute("id", key);	
 
+        		var numberOfUnseen = document.createElement('div')
+        		numberOfUnseen.setAttribute("class", "number");	
 
         		cardBody.appendChild(text);
         		cardBody.appendChild(useremail);
+        		cardBody.appendChild(numberOfUnseen);
         		card.appendChild(cardBody);
 
         		sidebarCard.appendChild(card);
@@ -162,7 +175,33 @@ window.onload = function () {
 
 	/// when a chat is received shown on display
 	socket.on('chat', function(data) {
-		output.innerHTML += "<p><strong>" + data.handle + "</strong> " + data.message +"</p>"
+		console.log(data);
+
+
+
+		if (data.sentById != chattingWith) {
+
+			if (data.sentById == currentUserId) {
+				output.innerHTML += "<p><strong>" + data.handle + "</strong> " + data.message +"</p>"
+				
+			} else {
+
+				document.getElementById(data.sentById).style.backgroundColor = '#b1d3ea';
+				/// play notification sound
+				var audio = new Audio('/sound/notification.mp3');
+				audio.play();
+			}
+
+		
+		} else {
+			output.innerHTML += "<p><strong>" + data.handle + "</strong> " + data.message +"</p>"
+			/// play notification sound
+			var audio = new Audio('/sound/notification.mp3');
+			audio.play();
+		}
+
+
+
 	});
 
 

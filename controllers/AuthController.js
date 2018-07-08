@@ -144,12 +144,10 @@ exports.login = function (req, res){
 *
 */
 exports.logout = function (req, res){
-
     try {
         if ( req.session ) {
             req.session.destroy(function(err){
                 if ( err ) {
-                    console.log(err);
                     return res.redirect('/gossip/chat');
                 } else {
                     return res.redirect('/');
@@ -158,7 +156,7 @@ exports.logout = function (req, res){
         }
 
     } catch(e) {
-        console.log(e);
+        return res.redirect('/');
     }
 
 }

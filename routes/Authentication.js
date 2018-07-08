@@ -13,6 +13,7 @@ router.post('/register', auth.register);
 
 // GET /register
 router.get('/register', (req, res, next) => res.render('register', { title: 'Sign Up'}))
+router.get('/logout', auth.logout)
 
 
 module.exports = router;
