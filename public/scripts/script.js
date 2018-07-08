@@ -14,10 +14,17 @@ window.onload = function () {
 
 	// renders the sidebar
 	function render (data){
+		console.log("render:");
+				console.log(data);
+				console.log("me");
+				console.log(currentUserName);
 		for (var key in data) {
 			if (key != currentUserId) {
 				/// store user data on the client side
 				users[key] = data[key];
+
+				
+
 
 				var card = document.createElement('div')
         		card.setAttribute("class", "card");	
