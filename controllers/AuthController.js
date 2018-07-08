@@ -7,9 +7,7 @@ const saltRounds = 10;
 const session    = require('express-session')
 var validator    = require('validator');
 
-
 /*
-*
 *  User registration
 *       todo: validation
 *       todo: error message
@@ -19,43 +17,43 @@ var validator    = require('validator');
 exports.register = function(req, res){
     try {
 
-    	var errors = [];
-    	req.session.errors = {}
-    	req.session.errors.password = {}
-    	req.session.errors.email = {}
+    	// var errors = [];
+    	// req.session.errors = {}
+    	// req.session.errors.password = {}
+    	// req.session.errors.email = {}
 
-    	if (!validator.isEmail(req.body.email)) {
-    		req.session.errors.email.error = true; 
-    		req.session.errors.email.message = "Not an email";
-    	}
+    	// if (!validator.isEmail(req.body.email)) {
+    	// 	req.session.errors.email.error = true; 
+    	// 	req.session.errors.email.message = "Not an email";
+    	// }
 
-    	if (!validator.isLength(req.body.password, { min:8, max:undefined })) {
-    		req.session.errors.password.error = true; 
-    		req.session.errors.password.message = "Minimum 8 charecter";
-    	}
+    	// if (!validator.isLength(req.body.password, { min:8, max:undefined })) {
+    	// 	req.session.errors.password.error = true; 
+    	// 	req.session.errors.password.message = "Minimum 8 charecter";
+    	// }
 
-    	if ( req.body.password != req.body.confirmPassword ) {
-    		req.session.errors.password.error = true; 
-    		req.session.errors.password.message = "Confirmed Password does not match";
-    	}
+    	// if ( req.body.password != req.body.confirmPassword ) {
+    	// 	req.session.errors.password.error = true; 
+    	// 	req.session.errors.password.message = "Confirmed Password does not match";
+    	// }
 
-    	if (!req.body.email) {
-    		req.session.errors.email.error = true; 
-    		req.session.errors.email.message = "Please enter an email";
-    	}
+    	// if (!req.body.email) {
+    	// 	req.session.errors.email.error = true; 
+    	// 	req.session.errors.email.message = "Please enter an email";
+    	// }
 
-    	if (!req.body.name) {
-    		req.session.errors.password.error = true; 
-    		req.session.errors.password.message = "Please enter a name";
-    	}
+    	// if (!req.body.name) {
+    	// 	req.session.errors.password.error = true; 
+    	// 	req.session.errors.password.message = "Please enter a name";
+    	// }
 
-    	if (req.session.errors.email || req.session.errors.password) {
-    		console.log(req.session);
-    		return res.redirect('/register');
-    	} else {
-    		console.log("ashe na");
-    		return res.redirect('/register');
-    	}
+    	// if (req.session.errors.email || req.session.errors.password) {
+    	// 	console.log(req.session);
+    	// 	return res.redirect('/register');
+    	// } else {
+    	// 	console.log("ashe na");
+    	// 	return res.redirect('/register');
+    	// }
 
 
         /// TODO: More validation
@@ -65,26 +63,6 @@ exports.register = function(req, res){
                 email: req.body.email,
                 name: req.body.name
             }
-
-
-          var userSchema = new Schema({
-            email: {
-              type: String,
-              validate: {
-                validator: function(v,res, cb) {
-                  userdata.find({email: v}, function(err, docs) {
-                    res.message = " User already exists"
-                    cb(docs.length == 0)
-                  })
-                },
-              }
-            }
-          })
-
-
-
-
-          console.log(userSchema.message)
 
             bcrypt.genSalt(saltRounds, function(err, salt) {
                     bcrypt.hash(req.body.password, salt, function(err, hash) {
@@ -101,19 +79,17 @@ exports.register = function(req, res){
 
                     });
             });
+        } else {
+            return res.redirect('/register');
         }
 
     } catch(error){
-    	console.log(error) 
-    	res.status(500).json({
-    		error: error    		
-    	})
+        return res.redirect('/register');
     }
 }
 
 
 /*
-*
 *  User login
 *       todo: validation
 *       todo: error message
