@@ -6,6 +6,8 @@ var bcrypt       = require('bcrypt');
 const saltRounds = 10;
 const session    = require('express-session')
 var validator    = require('validator');
+var validator = require("email-validator");
+var passwordValidator = require('password-validator');
 
 /*
 *  User registration
@@ -14,55 +16,49 @@ var validator    = require('validator');
 *       todo: restore signup info after an error
 */
 
-exports.register = function(req, res){
-    try {
 
-    	// var errors = [];
-    	// req.session.errors = {}
-    	// req.session.errors.password = {}
-    	// req.session.errors.email = {}
+var passwordSchema = new passwordValidator();
 
-    	// if (!validator.isEmail(req.body.email)) {
-    	// 	req.session.errors.email.error = true; 
-    	// 	req.session.errors.email.message = "Not an email";
-    	// }
+passwordSchema
+.is().min(8)                                    // Minimum length 8
+.is().max(100)                                  // Maximum length 100
+.has().uppercase()                              // Must have uppercase letters
+.has().lowercase()                              // Must have lowercase letters
+.has().digits()                                 // Must have digits
+.has().not().spaces()                           // Should not have spaces
 
-    	// if (!validator.isLength(req.body.password, { min:8, max:undefined })) {
-    	// 	req.session.errors.password.error = true; 
-    	// 	req.session.errors.password.message = "Minimum 8 charecter";
-    	// }
+exports.register = function(req, res, next){
+  // Last Resort
 
-    	// if ( req.body.password != req.body.confirmPassword ) {
-    	// 	req.session.errors.password.error = true; 
-    	// 	req.session.errors.password.message = "Confirmed Password does not match";
-    	// }
-
-    	// if (!req.body.email) {
-    	// 	req.session.errors.email.error = true; 
-    	// 	req.session.errors.email.message = "Please enter an email";
-    	// }
-
-    	// if (!req.body.name) {
-    	// 	req.session.errors.password.error = true; 
-    	// 	req.session.errors.password.message = "Please enter a name";
-    	// }
-
-    	// if (req.session.errors.email || req.session.errors.password) {
-    	// 	console.log(req.session);
-    	// 	return res.redirect('/register');
-    	// } else {
-    	// 	console.log("ashe na");
-    	// 	return res.redirect('/register');
-    	// }
+  if (req.body.email &&
+    req.body.name &&
+    req.body.password &&
+    req.body.confirmPassword) {
 
 
-        /// TODO: More validation
-        if ( req.body.email && req.body.name && ( req.body.password == req.body.confirmPassword ) ) {
+      if (validator.validate(req.body.email) === false) {
+        throw new Error("Email is not valid");
+      }
+
+      if (passwordSchema.validate(req.body.password) === false) {
+        throw new Error("Password is not Strong");
+      }
+
+      // confirm that user typed same password twice
+      if (req.body.password !== req.body.confirmPassword) {
+        var err = new Error('Passwords do not match.');
+        err.status = 400;
+        return next(err);
+      }
+
 
             var userdata = {
                 email: req.body.email,
                 name: req.body.name
             }
+
+
+
 
             bcrypt.genSalt(saltRounds, function(err, salt) {
                     bcrypt.hash(req.body.password, salt, function(err, hash) {
@@ -70,8 +66,7 @@ exports.register = function(req, res){
 
                         UserData.create(userdata, function(err, user){
                           if (err) {
-                                console.log(err);
-                                return res.redirect('/');
+                                return next(err);
                             } else {
                                 return res.redirect('/login');
                             }
@@ -79,13 +74,14 @@ exports.register = function(req, res){
 
                     });
             });
-        } else {
-            return res.redirect('/register');
-        }
 
-    } catch(error){
-        return res.redirect('/register');
+
+    } else {
+      var err = new Error('All fields required.');
+      err.status = 400;
+      return next(err);
     }
+
 }
 
 
