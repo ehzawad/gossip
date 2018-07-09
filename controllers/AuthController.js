@@ -100,7 +100,11 @@ exports.login = function (req, res, next){
             var user = UserData.findOne({ email: req.body.email });
             user.exec(function (err, data) {
                 if (err) {
-                    return res.redirect('/login');
+                    // return res.redirect('/login');
+                    var err = new Error('Wrong email or password.');
+                    err.status = 401;
+                    return next(err);
+
                 } else {
                     if ( data ) {
                         bcrypt.compare(req.body.password, data.password, function(err, response) {
@@ -114,11 +118,18 @@ exports.login = function (req, res, next){
 
                                 return res.redirect('/gossip/chat');
                             } else {
-                                return res.redirect('/login');
+
+                                var err = new Error('Wrong email or password.');
+                                err.status = 401;
+                                return next(err);
+                                // return res.redirect('/login');
                             }
                         });
                     } else {
-                        return res.redirect('/login')
+                        // return res.redirect('/login')
+                        var err = new Error('Wrong email or password.');
+                        err.status = 401;
+                        return next(err);
                     }
                 }
             });
