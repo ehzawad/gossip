@@ -1,5 +1,5 @@
 window.onload = function () {
-	var socket = io.connect('http://localhost:3000');
+	var socket = io.connect('https://chater-app.herokuapp.com');
 	
 	/// all the user ids
 	var users = {}
