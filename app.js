@@ -80,7 +80,7 @@ app.use((err, req, res, next) => {
 
 
 /// Socket configuration
-var io = require('socket.io').listen(app.listen(port));
+var io = require('socket.io').listen(app.listen(process.env.PORT || 3000));
 
 
 io.sockets.on('connection', function (socket) {
@@ -101,7 +101,6 @@ io.sockets.on('connection', function (socket) {
 
     //socket.emit('message', { message: 'welcome to the chat' });
     socket.on('chat', function (data) {
-        console.log(data.to)
         if (connectedUser[data.to]) {
         	connectedUser[data.to].emit('chat', data);
         }
