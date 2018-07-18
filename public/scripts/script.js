@@ -217,7 +217,7 @@ window.onload = function () {
 function ajaxCall( url, request ){
  	let promiseObject = new Promise(( resolve, reject ) => {
 		var xhttp = new XMLHttpRequest();
-		xhttp.open('POST', "http://localhost:3000/gossip/"+url, true);
+		xhttp.open('POST', "https://chater-app.herokuapp.com/gossip/"+url, true);
 		xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	  	
 	  	// I lied, Still no hype though :( 
@@ -246,7 +246,7 @@ function ajaxCallGet( url ){
 	     	}
 	  	};
 
-		xhttp.open('GET', "http://localhost:3000/gossip/"+url, true);
+		xhttp.open('GET', "https://chater-app.herokuapp.com/gossip/"+url, true);
 	  	xhttp.send();
 	})
 
