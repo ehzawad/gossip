@@ -50,14 +50,10 @@ exports.register = function(req, res, next){
         err.status = 400;
         return next(err);
       }
-
-
             var userdata = {
                 email: req.body.email,
                 name: req.body.name
             }
-
-
 
 
             bcrypt.genSalt(saltRounds, function(err, salt) {

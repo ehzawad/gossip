@@ -9,11 +9,16 @@ const port 				= 3000
 var connectedUser = {};
 var connectedUserInfo = {};
 
-// mongodb connection
-mongoose.connect("mongodb://localhost:27017/gossip")
-const db = mongoose.connection
 
-db.on('error', console.error.bind(console, 'connection error'))
+function __initializeMongo(){
+  console.log("Mongo initializing starts");
+  mongoose.connect("mongodb://Siam:1qazZAQ!@ds139341.mlab.com:39341/gossip", { reconnectTries: 0});
+  mongoose.connection.on('error',function(err){
+    console.log('Mongo Connection Error',{err:err});
+  });
+}
+__initializeMongo()
+
 
 // parsing incoming requests
 // create a middleware for urlencodedbody

@@ -1,8 +1,5 @@
-var log          = require('logger').createLogger();
-var logger       = require('logger').createLogger('development.log'); // logs to a file
-const session    = require('express-session')
 const Messages   = require("../models/textmessage");
-const Users   = require("../models/user");
+const Users  	 = require("../models/user");
 
 
 exports.dashboard = function(req, res){
